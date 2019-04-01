@@ -50,6 +50,7 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>roscpp</build_depend>
+  <depend>rospy</depend>
   <build_depend>uwds</build_depend>
   <build_depend>uwds_msgs</build_depend>
   <build_export_depend>roscpp</build_export_depend>
