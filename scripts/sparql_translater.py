@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 import rospy
 import numpy as np
-from uwds_msgs.msg import SimpleQuery
+from uwds_msgs.srv import SimpleQuery
 import keras
 from keras.models import Model, Input
 from keras.layers import Embedding, LSTM, Bidirectional, Dense

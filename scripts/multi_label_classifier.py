@@ -2,4 +2,8 @@
 # -*- coding: UTF-8 -*-
 
 import rospy
-import keras
+#import keras
+
+class MultiLabelClassifier:
+    def __init__(self):
+        pass

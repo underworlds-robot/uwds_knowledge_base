@@ -7,6 +7,9 @@
   <arg name="nodelet_manager" default=""/>
   <arg name="launch-prefix" default=""/>
 
+  <arg name="verbose" default="false"/>
+  <arg name="data_dir" value="$(find uwds_knowledge_base)/res/data"/>
+
   <node name="uwds_server"
         pkg="nodelet" type="nodelet"
         args="load uwds/UwdsServerNodelet $(arg nodelet_manager)"
@@ -15,16 +18,15 @@
         launch-prefix="$(arg launch-prefix)"
         if="$(arg start_server)"/>
 
-  <param name="data_dir" value="$(find uwds_knowledge_base)/res/data"/>
-  <node name="sparql_translater" pkg="uwds_knowledge_base" type="sparql_translater.py"/>
-  <node name="uwds_knowledge_base"
+  <node name="sparql_translater"
         pkg="uwds_knowledge_base" type="sparql_translater.py"
         respawn="$(arg respawn)"
         output="$(arg output)"
         launch-prefix="$(arg launch-prefix)">
     <rosparam subst_value="true">
-      data_dir : $(find uwds_knowledge_base)/res/data
-      verbose : false
+      data_dir : $(arg data_dir)
+      verbose : $(arg verbose)
     </rosparam>
   </node>
+
 </launch>

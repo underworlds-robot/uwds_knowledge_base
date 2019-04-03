@@ -7,10 +7,8 @@
   <arg name="nodelet_manager" default=""/>
   <arg name="launch-prefix" default=""/>
 
-  <arg name="oro_host" default="localhost"/>
-  <arg name="oro_port" default="6969"/>
   <arg name="verbose" default="false"/>
-  <arg name="data_dir" value="$(find uwds_knowledge_base)/res/data"/>
+  <arg name="robot_pkg_base" default="~/openrobots"/>
 
   <node name="uwds_server"
         pkg="nodelet" type="nodelet"
@@ -20,13 +18,13 @@
         launch-prefix="$(arg launch-prefix)"
         if="$(arg start_server)"/>
 
-  <node name="uwds_knowledge_base"
-        pkg="uwds_knowledge_base" type="uwds_knowledge_base.py"
+  <node name="oro_launcher"
+        pkg="uwds_knowledge_base" type="launch_oro.py"
         respawn="$(arg respawn)"
         output="$(arg output)"
         launch-prefix="$(arg launch-prefix)">
     <rosparam subst_value="true">
-      data_dir : $(arg data_dir)
+      robot_pkg_base: $(arg robot_pkg_base)
       verbose : $(arg verbose)
     </rosparam>
   </node>
