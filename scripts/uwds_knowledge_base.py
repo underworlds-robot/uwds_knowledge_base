@@ -5,6 +5,8 @@ import rospy
 from uwds_msgs.srv import QueryInContext
 from pyuwds.uwds_client import UwdsClient
 from pyuwds.uwds import READER
+from pyuwds.types.nodes import CAMERA, MESH, ENTITY
+from pyuwds.types.situations import FACT, ACTION, GENERIC, INTERNAL
 from pyoro import Oro
 
 class KnowledgeBase(UwdsClient):
@@ -27,27 +29,28 @@ class KnowledgeBase(UwdsClient):
         namespace = world_name.split("/")
         agent = namespace[0]
         world = namespace[1]
+        types = []
+        scene = self.ctx.worlds()[world_name].scene()
 
-        scene = self.ctx.worlds[world_name].scene
-
-        types_str = scene.getNodeProperty(node.id, "class")
+        types_str = scene.nodes().get_node_property(node.id, "class")
         if types_str != "":
             types = types_str.split(",")
         else:
             if node.type == MESH: types.append("TangibleThing")
-            if node.type == ENTITY: type.append("LocalizedThing")
-            if node.type == CAMERA: type.append("ExistingThing")
+            if node.type == ENTITY: types.append("LocalizedThing")
+            if node.type == CAMERA: types.append("ExistingThing")
 
         for type in types:
             if agent == "robot":
-                self.kb.add(node.id+" rdf:Type "+property.data, world)
+                self.kb += [node.id+" rdf:type "+type]
             else:
-                self.kb.addForAgent(agent, node.id+" rdf:Type "+property.data, world)
+                self.kb.addForAgent(agent, node.id+" rdf:type "+type)
+
         if agent == "robot":
-            success = self.kb.checkConsistency()
+            self.kb += [node.id+" rdfs:label "+node.name]
         else:
-            success = self.kb.checkForAgent(agent)
-        return success
+            self.kb.addForAgent(agent, node.id+" rdfs:label "+node.name)
+        return True
 
     def removeNode(self, world_name, node_id):
         """
@@ -57,19 +60,60 @@ class KnowledgeBase(UwdsClient):
     def addSituation(self, world_name, situation):
         """
         """
-        namespace = world_name.split("/")
-        agent = namespace[0]
-        world = namespace[1]
-        pass
+        if situation.end.data != rospy.Time(0):
+            namespace = world_name.split("/")
+            agent = namespace[0]
+            world = namespace[1]
+
+            timeline = self.ctx.worlds()[world_name].timeline()
+
+            subject = timeline.situations().get_situation_property(situation.id, "subject")
+            object = timeline.situations().get_situation_property(situation.id, "object")
+
+            if situation.type == ACTION:
+                predicate = timeline.situations().get_situation_property(situation.id, "action")
+            else:
+                predicate = timeline.situations().get_situation_property(situation.id, "predicate")
+
+
+            situation = ""
+            if subject != "":
+                if predicate != "":
+                    if object != "":
+                        situation = node.id+" "+predicate+" "+object
+                    else:
+                        situation = node.id+" "+predicate
+
+            rospy.loginfo(situation)
+            if situation != "":
+                if agent == "robot":
+                    self.kb += [situation]
+                else:
+                    self.kb.addForAgent(agent, situation)
+
 
     def removeSituation(self, world_name, situation):
         """
         """
         pass
 
+    def onChanges(self, world_name, header, invalidations):
+        pass
+
     def queryKnowledgeBase(self, world_name, query):
         """
         """
+        if not self.ctx.worlds().has(world_name):
+            scene = self.ctx.worlds()[world_name].scene()
+            timeline = self.ctx.worlds()[world_name].timeline()
+            self.ctx.worlds()[world_name].connect(self.onChanges)
+            rospy.loginfo("nb nodes : "+str(len(scene.nodes()))+" (root included)")
+            for node in scene.nodes():
+                if node.name != "root":
+                    self.addNode(world_name, node)
+            rospy.loginfo("nb situations : "+str(len(timeline.situations())))
+            for situation in timeline.situations():
+                self.addSituation(world_name, situation)
         namespace = world_name.split("/")
         agent = namespace[0]
         world = namespace[1]
