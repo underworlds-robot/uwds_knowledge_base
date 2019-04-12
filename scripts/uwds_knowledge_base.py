@@ -100,7 +100,7 @@ class KnowledgeBase(UwdsClient):
                 self.__support[object] = True
 
         if predicate == "isIn":
-            if object not in self.__support:
+            if object not in self.__container:
                 self.kb.safeAddForAgent(oro_agent, [object+" rdf:type Container"])
                 self.__container[object] = True
 
