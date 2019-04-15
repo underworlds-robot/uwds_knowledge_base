@@ -10,7 +10,7 @@
   <arg name="oro_host" default="localhost"/>
   <arg name="oro_port" default="6969"/>
   <arg name="verbose" default="true"/>
-  <arg name="data_dir" value="$(find uwds_knowledge_base)/res/data"/>
+  <arg name="data_dir" value="$(find uwds_knowledge_base)/res/data/"/>
   <arg name="robot_pkg_base" default="~/openrobots"/>
   <arg name="ontology_path" default="$(find uwds_knowledge_base)/res/owl/underworlds.owl"/>
 

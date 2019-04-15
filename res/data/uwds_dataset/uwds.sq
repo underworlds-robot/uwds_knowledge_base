@@ -1,0 +1,4 @@
+? object hasShape cube , ? support isA regex( table ) , ? object isOn ? support , ? object isReachable RECEIVER
+? object isA cup , ? support isA regex( table ) , ? object isOn ? support , ? support hasColor black , ? object isReachable RECEIVER
+? object isA cup , ? object hasColor blue , ? support isA regex( table ) , ? object isOn ? support , ? support isA black , ? object isReachable RECEIVER
+* isOn ? container , ? container isA regex( boxe ) , ? container hasColor blue

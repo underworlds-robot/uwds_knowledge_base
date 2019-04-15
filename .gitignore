@@ -3,7 +3,8 @@ logs/
 build/
 bin/
 lib/
-data/
+res/data/geo880-sparql/
+res/data/glove/
 msg_gen/
 srv_gen/
 msg/*Action.msg
