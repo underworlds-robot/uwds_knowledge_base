@@ -7,6 +7,7 @@ This component allow to query the RDF server in natural language by exploiting L
 We assume that you already have Underworlds installed, if not follow this [guide](https://github.com/underworlds-robot/uwds/blob/master/QUICKSTART.md).
 
 # Installation instructions
+
 ### Ontology related
 First, clone the repo and download the KB with :
 
@@ -17,26 +18,17 @@ cd uwds_knowledge_base
 ```
 ### Deep learning related
 
-#### Without GPU (recommended for beginners)
-Download TensorFlow and Keras :
-```shell
-pip install --user tensorflow
-pip install --user keras
-```
-#### With GPU
-Requires a CUDA compatible GPU, see list [here](https://developer.nvidia.com/cuda-gpus)
+Download the required package into a virtual environment with :
 
-Install CUDA for your GPU by following this [guide](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
-
-Then download TensorFlow and Keras :
 ```shell
-pip install --user tensorflow-gpu
-pip install --user keras
+virtualenv uwds_kb
+source uwds_kb/bin/activate
+pip install OpenNMT-tf
 ```
-You can optionally download the dataset for learning by executing the `./download_data.sh` script
+
+Note : The virtual environment will be activated by the r
 
 # Launch instructions
-
 
 ```shell
 roslaunch uwds_knowledge_base uwds_knowledge_base.launch

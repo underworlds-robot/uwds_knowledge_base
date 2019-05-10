@@ -8,6 +8,7 @@ from pyuwds.uwds import READER
 from pyuwds.types.nodes import CAMERA, MESH, ENTITY
 from pyuwds.types.situations import FACT, ACTION, GENERIC, INTERNAL
 from pyoro import Oro
+from word_to_vector import WordVectorManager
 
 class KnowledgeBase(UwdsClient):
     def __init__(self):
